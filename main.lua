@@ -18,10 +18,11 @@ PADDLE_SPEED = 200
 
 function love.load() -- day 0 update
     love.graphics.setDefaultFilter('nearest', 'nearest') 
+    love.window.setTitle("Tanginamo AJ!")
     math.randomseed(os.time())
     --[[ instead of using love.window.setMode we used push:setupScreen ]]
     -- key reason is to create a retro feel in the game 
-    -- scoreFont = love.graphics.newFont('font.ttf', 32)
+    scoreFont = love.graphics.newFont('font.ttf', 32)
     smallFont = love.graphics.newFont('font.ttf', 8)
     love.graphics.setFont(smallFont)
 
@@ -33,6 +34,9 @@ function love.load() -- day 0 update
 
     player1 = Paddle(10, 30 , 5, 20)
     player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
+
+    player1Score = 0
+    player2Score = 0
 
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
@@ -91,17 +95,26 @@ function love.draw()
         love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
     end
 
+    love.graphics.setFont(scoreFont)
+    love.graphics.print(
+        tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
+        VIRTUAL_HEIGHT / 3)
+    
+    love.graphics.print(
+        tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
+        VIRTUAL_HEIGHT / 3)
+
     player1:render()
     player2:render()
     ball:render()
-    -- love.graphics.setFont(scoreFont)
-    -- love.graphics.print(
-    --     tostring(playerOneScore), VIRTUAL_WIDTH / 2 - 50,
-    --     VIRTUAL_HEIGHT / 3)
-    
-    -- love.graphics.print(
-    --     tostring(playerTwoScore), VIRTUAL_WIDTH / 2 + 30,
-    --     VIRTUAL_HEIGHT / 3)
+
+    displayFPS()
     push:apply('end') -- end of the push graphics 
+end
+
+function displayFPS()
+    love.graphics.setFont(smallFont)
+    love.graphics.setColor(0, 255/255, 0, 255/255)
+    love.graphics.print('FPS: ' ..tostring(love.timer.getFPS()),10 ,10)
 end
 
